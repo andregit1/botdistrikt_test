@@ -1,0 +1,543 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "botdistrikt_test",
+    "description": "botdistrikt_test"
+  },
+  "basePath": "/api",
+  "securityDefinitions": {
+    "sessionAuth": {
+      "type": "apiKey",
+      "name": "Cookie",
+      "in": "header",
+      "description": "Authentication is based on session cookies. Ensure you're logged in before accessing these endpoints."
+    }
+  },
+  "security": [
+    {
+      "sessionAuth": []
+    }
+  ],
+  "paths": {
+    "/customers/register": {
+      "post": {
+        "tags": [
+          "Customer"
+        ],
+        "summary": "Register a new customer.",
+        "operationId": "Customer.register",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Username of the customer to be registered.",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "username": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Request was successful",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Register successful"
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/customers/login": {
+      "post": {
+        "tags": [
+          "Customer"
+        ],
+        "summary": "Login with unique username.",
+        "operationId": "Customer.login",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Username of the customer to be registered.",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "username": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Request was successful",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Login successful"
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/customers/logout": {
+      "post": {
+        "tags": [
+          "Customer"
+        ],
+        "summary": "Logout the current user.",
+        "operationId": "Customer.logout",
+        "responses": {
+          "200": {
+            "description": "Request was successful",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Logout successful"
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/customers/profile": {
+      "get": {
+        "tags": [
+          "Customer"
+        ],
+        "summary": "Get the current user profile.",
+        "operationId": "Customer.profile",
+        "responses": {
+          "200": {
+            "description": "Request was successful",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "username": {
+                  "type": "string",
+                  "description": "Username of the registered user"
+                },
+                "email": {
+                  "type": "string",
+                  "description": "Email of the registered user"
+                },
+                "phone": {
+                  "type": "string",
+                  "description": "Phone number of the registered user"
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/customers/profile/update": {
+      "put": {
+        "tags": [
+          "Customer"
+        ],
+        "summary": "Update the details of the logged-in user.",
+        "operationId": "Customer.updateDetails",
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "phone": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Profile update was successful",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "username": {
+                  "type": "string"
+                },
+                "phone": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/customers": {
+      "get": {
+        "tags": [
+          "Customer"
+        ],
+        "summary": "Get all customers.",
+        "operationId": "Customer.getAllCustomers",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "number",
+                    "format": "double",
+                    "description": "ID of the customer"
+                  },
+                  "username": {
+                    "type": "string",
+                    "description": "Username of the customer"
+                  },
+                  "phone": {
+                    "type": "string",
+                    "description": "Phone number of the customer"
+                  },
+                  "email": {
+                    "type": "string",
+                    "description": "Email of the customer"
+                  }
+                },
+                "required": [
+                  "id",
+                  "username",
+                  "phone",
+                  "email"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/menu-items": {
+      "get": {
+        "tags": [
+          "MenuItem"
+        ],
+        "summary": "Get all menu items.",
+        "operationId": "MenuItem.getAllMenuitems",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Request was successful",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "price": {
+                    "type": "number",
+                    "format": "double"
+                  },
+                  "image_url": {
+                    "type": "string"
+                  },
+                  "image_name": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "MenuItem"
+        ],
+        "summary": "Create a new menu item.",
+        "operationId": "MenuItem.createMenuItem",
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "description": "Data of the menu item to be created.",
+            "required": false,
+            "schema": {
+              "name": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "price": {
+                "type": "number",
+                "format": "double"
+              },
+              "image_url": {
+                "type": "string"
+              },
+              "image_name": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Request was successful",
+            "schema": {
+              "type": "object"
+            }
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/orders": {
+      "post": {
+        "tags": [
+          "Order"
+        ],
+        "summary": "Create a new order with associated menu items.",
+        "operationId": "Order.createOrder",
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "menu_item_ids": {
+                  "type": "array",
+                  "items": {
+                    "type": "integer",
+                    "format": "double"
+                  }
+                },
+                "transaction_date": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "table_number": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "total_price": {
+                  "type": "number",
+                  "example": 99.99
+                }
+              },
+              "required": [
+                "menu_item_ids",
+                "transaction_date",
+                "table_number",
+                "total_price"
+              ],
+              "additionalProperties": false
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Order created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer",
+                      "description": "Order ID"
+                    },
+                    "customer": {
+                      "$ref": "#/components/schemas/Customer",
+                      "description": "Customer details"
+                    },
+                    "ordered_items": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/MenuItem"
+                      },
+                      "description": "List of ordered items"
+                    },
+                    "transaction_uuid": {
+                      "type": "string",
+                      "description": "Transaction UUID"
+                    },
+                    "transaction_date": {
+                      "type": "string",
+                      "format": "date-time",
+                      "description": "Transaction date and time"
+                    },
+                    "table_number": {
+                      "type": "integer",
+                      "description": "Table number"
+                    },
+                    "total_price": {
+                      "type": "number",
+                      "description": "Total price of the order"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "tags": [
+      {
+        "name": "Customer"
+      },
+      {
+        "name": "MenuItem"
+      },
+      {
+        "name": "Order"
+      }
+    ],
+    "consumes": [
+      "application/json",
+      "application/x-www-form-urlencoded",
+      "application/xml",
+      "text/xml"
+    ],
+    "produces": [
+      "application/json",
+      "application/xml",
+      "text/xml",
+      "application/javascript",
+      "text/javascript"
+    ]
+  },
+  "components": {
+    "schemas": {
+      "Customer": {
+        "properties": {
+          "id": {
+            "type": "number",
+            "format": "double"
+          },
+          "username": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "username"
+        ],
+        "additionalProperties": false
+      },
+      "MenuItem": {
+        "properties": {
+          "id": {
+            "type": "number",
+            "format": "double"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "price": {
+            "type": "number",
+            "format": "double"
+          },
+          "image_url": {
+            "type": "string"
+          },
+          "image_name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "price"
+        ],
+        "additionalProperties": false
+      },
+      "Order": {
+        "properties": {
+          "id": {
+            "type": "number",
+            "format": "double"
+          },
+          "customer_id": {
+            "type": "number",
+            "format": "double"
+          },
+          "transaction_uuid": {
+            "type": "string"
+          },
+          "transaction_date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "table_number": {
+            "type": "number",
+            "format": "double"
+          },
+          "total_price": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "required": [
+          "transaction_uuid",
+          "transaction_date",
+          "table_number",
+          "total_price"
+        ],
+        "additionalProperties": false
+      }
+    }
+  }
+}

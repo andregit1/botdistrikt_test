@@ -1,0 +1,72 @@
+{
+	"name": "Order",
+	"plural": "orders",
+	"base": "PersistedModel",
+	"idInjection": true,
+	"options": {
+		"validateUpsert": true
+	},
+	"properties": {
+		"id": {
+			"type": {
+				"id": true,
+				"generated": true
+			}
+		},
+		"customer_id": {
+			"type": "number",
+			"postgresql": {
+				"columnName": "customer_id",
+				"dataType": "BIGINT",
+				"dataLength": null,
+				"dataPrecision": null,
+				"dataScale": 0,
+				"nullable": false
+			}
+		},
+		"transaction_uuid": {
+			"type": "string",
+			"required": true
+		},
+		"transaction_date": {
+			"type": "date",
+			"required": true
+		},
+		"table_number": {
+			"type": "number",
+			"required": true
+		},
+		"total_price": {
+			"type": "number",
+			"required": true,
+			"postgresql": {
+				"columnName": "total_price",
+				"dataType": "NUMERIC",
+				"dataPrecision": 10,
+				"dataScale": 2
+			}
+		}
+	},
+	"validations": [],
+	"relations": {
+		"menuItems": {
+			"type": "hasAndBelongsToMany",
+			"model": "MenuItem",
+			"foreignKey": "",
+			"throughTable": "MenuItemOrder",
+			"options": {
+				"nestRemoting": true
+			}
+		},
+		"customer": {
+			"type": "belongsTo",
+			"model": "Customer",
+			"foreignKey": "customer_id",
+			"options": {
+				"nestRemoting": true
+			}
+		}
+	},
+	"acls": [],
+	"methods": {}
+}

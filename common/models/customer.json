@@ -1,0 +1,40 @@
+{
+	"name": "Customer",
+	"plural": "customers",
+	"base": "PersistedModel",
+	"idInjection": true,
+	"options": {
+		"validateUpsert": true
+	},
+	"properties": {
+		"id": {
+			"type": {
+				"id": true,
+				"generated": true
+			}
+		},
+		"username": {
+			"type": "string",
+			"required": true
+		},
+		"phone": {
+			"type": "string"
+		},
+		"email": {
+			"type": "string"
+		}
+	},
+	"validations": [],
+	"relations": {
+		"orders": {
+			"type": "hasMany",
+			"model": "Order",
+			"foreignKey": "customer_id",
+			"options": {
+				"nestRemoting": true
+			}
+		}
+	},
+	"acls": [],
+	"methods": {}
+}

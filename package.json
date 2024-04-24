@@ -1,0 +1,40 @@
+{
+  "name": "botdistrikt_test",
+  "version": "1.0.0",
+  "main": "server/server.js",
+  "engines": {
+    "node": ">=6"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "start": "concurrently -c -k \"nodemon server/server.js\" \"cd client && ember serve\"",
+    "dev": "nodemon server/server.js",
+    "posttest": "npm run lint"
+  },
+  "dependencies": {
+    "compression": "^1.0.3",
+    "cors": "^2.5.2",
+    "express-session": "^1.18.0",
+    "helmet": "^3.10.0",
+    "loopback": "^3.22.0",
+    "loopback-boot": "^2.6.5",
+    "loopback-component-explorer": "^6.2.0",
+    "loopback-connector-postgresql": "^7.1.0",
+    "serve-favicon": "^2.0.1",
+    "strong-error-handler": "^4.0.0",
+    "swagger-ui-express": "^5.0.0"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "eslint": "^9.1.1",
+    "eslint-config-loopback": "^8.0.0",
+    "eslint-config-prettier": "^9.1.0",
+    "nodemon": "^3.1.0"
+  },
+  "repository": {
+    "type": "",
+    "url": ""
+  },
+  "license": "UNLICENSED",
+  "description": "botdistrikt_test"
+}

@@ -1,0 +1,7 @@
+{
+	"extends": ["loopback", "prettier"],
+	"rules": {
+		"code": 0,
+		"comments": 0
+	}
+}

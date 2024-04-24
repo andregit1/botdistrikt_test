@@ -1,0 +1,11 @@
+{
+  "postgresql": {
+    "host": "localhost",
+    "port": 5432,
+    "database": "resto_dev",
+    "username": "root",
+    "password": "123123123",
+    "name": "postgresql",
+    "connector": "postgresql"
+  }
+}

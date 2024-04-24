@@ -1,0 +1,48 @@
+{
+	"name": "MenuItem",
+	"plural": "menu-items",
+	"base": "PersistedModel",
+	"idInjection": true,
+	"options": {
+		"validateUpsert": true
+	},
+	"properties": {
+		"id": {
+			"type": {
+				"id": true,
+				"generated": true
+			}
+		},
+		"name": {
+			"type": "string",
+			"required": true
+		},
+		"description": {
+			"type": "string"
+		},
+		"price": {
+			"type": "number",
+			"required": true
+		},
+		"image_url": {
+			"type": "string"
+		},
+		"image_name": {
+			"type": "string"
+		}
+	},
+	"validations": [],
+	"relations": {
+		"orders": {
+			"type": "hasAndBelongsToMany",
+			"model": "Order",
+			"foreignKey": "",
+			"throughTable": "MenuItemOrder",
+			"options": {
+				"nestRemoting": true
+			}
+		}
+	},
+	"acls": [],
+	"methods": {}
+}
