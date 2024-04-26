@@ -43,62 +43,6 @@ describe('POST /api/customers/register', function() {
   });
 });
 
-// // Test suite for Customer login endpoint
-// describe('POST /api/customers/login', function() {
-  
-//   let registeredUser;
-
-//   // Register a customer before testing login
-//   before(function(done) {
-//     const testData = {
-//       username: 'botdistrikt',
-//       phone: '',
-//       email: ''
-//     };
-    
-//     supertest(app)
-//       .post('/api/customers/register')
-//       .send(testData)
-//       .expect(200)
-//       .end(function(err, res) {
-//         if (err) return done(err);
-//         registeredUser = res.body;
-//         done();
-//       });
-//   });
-
-//   // Test case for successful login
-//   it('should log in a customer with valid username', function(done) {
-//     const testData = { username: 'botdistrikt' };
-
-//     // Make a POST request to the login endpoint
-//     supertest(app)
-//       .post('/api/customers/login')
-//       .send(testData)
-//       .expect(200)
-//       .end(function(err, res) {
-//         if (err) return done(err);
-//         assert.equal(res.body, registeredUser); // Ensure correct user object is returned
-//         done(); // Signal completion of the test
-//       });
-//   });
-
-//   // Test case for login with invalid username
-//   it('should return an error for invalid username', function(done) {
-//     const testData = { username: 'invaliduser' };
-
-//     // Make a POST request to the login endpoint
-//     supertest(app)
-//       .post('/api/customers/login')
-//       .send(testData)
-//       .expect(401)
-//       .end(function(err, res) {
-//         if (err) return done(err);
-//         done();
-//       });
-//   });
-// });
-
 // Test suite for Customer login endpoint
 describe('POST /api/customers/login', function() {
   
