@@ -9,7 +9,8 @@
     "lint": "eslint .",
     "start": "concurrently -c -k \"nodemon server/server.js\" \"cd client && ember serve\"",
     "dev": "nodemon server/server.js",
-    "posttest": "npm run lint"
+    "posttest": "npm run lint",
+    "test": "set NODE_ENV=test && mocha test/*test.js"
   },
   "dependencies": {
     "compression": "^1.0.3",
@@ -25,11 +26,15 @@
     "swagger-ui-express": "^5.0.0"
   },
   "devDependencies": {
+    "chai": "^5.1.0",
     "concurrently": "^8.2.2",
     "eslint": "^9.1.1",
     "eslint-config-loopback": "^8.0.0",
     "eslint-config-prettier": "^9.1.0",
-    "nodemon": "^3.1.0"
+    "loopback-datasource-juggler": "^5.0.8",
+    "mocha": "^10.4.0",
+    "nodemon": "^3.1.0",
+    "supertest": "^7.0.0"
   },
   "repository": {
     "type": "",

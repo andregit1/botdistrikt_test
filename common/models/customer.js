@@ -40,23 +40,27 @@ module.exports = function(Customer) {
   });
 
   // Remote method for login
-  Customer.login = function(data, req, callback) {
+Customer.login = async function(data, req, callback) {
+  try {
     const username = data.username;
     
-    Customer.findOne({ where: { username: username } }, function(err, user) {
-      if (err) return callback(err);
-      if (!user) {
-        var error = new Error('Invalid username');
-        error.statusCode = 401;
-        return callback(error);
-      }
+    const user = await Customer.findOne({ where: { username: username } });
+    
+    if (!user) {
+      var error = new Error('Invalid username');
+      error.statusCode = 401;
+      return callback(error);
+    }
 
-      // Store the user's ID in the session
-      req.session.userId = user.id;
+    // Store the user's ID in the session
+    req.session.userId = user.id;
 
-      callback(null, user);
-    });
-  };
+    callback(null, user);
+  } catch (err) {
+    callback(err);
+  }
+};
+
 
   // Expose the login method over REST
   Customer.remoteMethod('login', {
