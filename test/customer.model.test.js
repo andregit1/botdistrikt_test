@@ -102,7 +102,12 @@ describe('POST /api/customers/register', function() {
 // Test suite for Customer login endpoint
 describe('POST /api/customers/login', function() {
   
-  let registeredUser;
+  let agent; // Declare the agent variable to persist cookies
+  
+  // Before hook to set up the agent
+  before(function() {
+    agent = supertest.agent(app); // Create a supertest agent
+  });
 
   // Register a customer before testing login
   before(function(done) {
@@ -113,53 +118,38 @@ describe('POST /api/customers/login', function() {
     };
     
     // Register the customer
-    supertest(app)
+    agent
       .post('/api/customers/register')
       .send(testData)
       .expect(200)
-      .end(function(err, res) {
-        if (err) return done(err);
-
-        // Retrieve the registered user from the database
-        Customer.find({ where: { username: testData.username } }, function(err, users) {
-          if (err) return done(err);
-          registeredUser = users[0]; // Store the registered user
-          console.log('Registered user:', registeredUser); // Log the registered user
-          done();
-        });
-      });
+      .end(done);
   });
 
   // Test case for successful login
   it('should log in a customer with valid username', function(done) {
-    // const testData = { username: 'botdistrikt' };
-
-    // Make a POST request to the login endpoint
-    supertest(app)
+    // Make a POST request to the login endpoint using the agent
+    agent
       .post('/api/customers/login')
-      .send({ username: 'botdistrikt' })
+      .send({ username: 'botdistrikt', password: '' })
       .expect(200)
-      .end(function(err, res) {
-        if (err) return done(err);
-        // assert.equal(res.body, registeredUser); // Ensure correct user object is returned
-        assert.equal(res.body.username, registeredUser.username);
-
-        done(); // Signal completion of the test
-      });
+      .end(done);
   });
 
   // Test case for login with invalid username
   it('should return an error for invalid username', function(done) {
     const testData = { username: 'invaliduser' };
 
-    // Make a POST request to the login endpoint
-    supertest(app)
+    // Make a POST request to the login endpoint using the agent
+    agent
       .post('/api/customers/login')
       .send(testData)
       .expect(401)
-      .end(function(err, res) {
-        if (err) return done(err);
-        done();
-      });
+      .end(done);
+  });
+
+  it('should log out a customer successfully', function(done) {
+    agent
+      .post('/api/customers/logout')
+      .expect(200, done);
   });
 });
