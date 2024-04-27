@@ -130,6 +130,8 @@ module.exports = function(Customer) {
     http: { verb: 'get', path: '/profile' }
   });
 
+  const EMAIL_REGEX = new RegExp("^[\\w\\.-]+@([\\w-]+\\.)+[\\w-]{2,4}$");
+  
   // Expose the method to update user details
   Customer.updateDetails = function(data, req, callback) {
     // Get the current user's ID from the session
@@ -138,6 +140,13 @@ module.exports = function(Customer) {
     if (!userId) {
       var error = new Error('User not logged in');
       error.statusCode = 401;
+      return callback(error);
+    }
+
+     // Check if the provided email format is valid
+     if (data.email && !EMAIL_REGEX.test(data.email)) {
+      var error = new Error('Invalid email format');
+      error.statusCode = 400;
       return callback(error);
     }
 

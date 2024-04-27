@@ -75,8 +75,11 @@ function cleanDatabase(done) {
   ], done);
 }
 
+const agent = supertest.agent(app); // Create a supertest agent
+
 module.exports = {
   app,
+  agent,
   assert, 
   supertest,
   cleanDatabase, 
