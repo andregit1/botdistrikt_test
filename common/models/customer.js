@@ -78,10 +78,12 @@ module.exports = function(Customer) {
   // Remote method for logout
   Customer.logout = function(req, callback) {
     // Clear the user's ID from the session
-    req.session.destroy(function(err) {
-      if (err) return callback(err);
-      callback(null, { message: 'Logout successful' });
-    });
+    delete req.session.userId
+    // req.session.destroy(function(err) {
+    //   if (err) return callback(err);
+    //   callback(null, { message: 'Logout successful' });
+    // });
+    callback(null, 'Logout successful');
   };
 
   // Expose the logout method over REST

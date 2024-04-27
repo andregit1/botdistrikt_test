@@ -21,6 +21,7 @@
     "loopback-boot": "^2.6.5",
     "loopback-component-explorer": "^6.2.0",
     "loopback-connector-postgresql": "^7.1.0",
+    "memorystore": "^1.6.7",
     "serve-favicon": "^2.0.1",
     "strong-error-handler": "^4.0.0",
     "swagger-ui-express": "^5.0.0"
@@ -28,13 +29,16 @@
   "devDependencies": {
     "chai": "^5.1.0",
     "concurrently": "^8.2.2",
+    "cookie": "^0.6.0",
+    "cookie-signature": "^1.2.1",
     "eslint": "^9.1.1",
     "eslint-config-loopback": "^8.0.0",
     "eslint-config-prettier": "^9.1.0",
     "loopback-datasource-juggler": "^5.0.8",
     "mocha": "^10.4.0",
     "nodemon": "^3.1.0",
-    "supertest": "^7.0.0"
+    "supertest": "^7.0.0",
+    "supertest-session": "^5.0.1"
   },
   "repository": {
     "type": "",
