@@ -29,6 +29,7 @@ describe('Order.create', function() {
   let menuItem1;
   let menuItem2;
   let menuItem3;
+  let orderData;
 
   beforeEach(async function() {
     firstCustomer = await Customer.create({
@@ -40,6 +41,13 @@ describe('Order.create', function() {
     menuItem1 = await MenuItem.create({ name: 'burger-one', price: 1.99 });
     menuItem2 = await MenuItem.create({ name: 'burger-two', price: 2.99 });
     menuItem3 = await MenuItem.create({ name: 'burger-three', price: 3.99 });
+
+    orderData = {
+      menu_item_ids: [menuItem1.id, menuItem2.id, menuItem3.id],
+      transaction_date: '2024-04-28',
+      table_number: 5,
+      total_price: menuItem1.price + menuItem2.price + menuItem3.price
+    };
   });
 
   it('should create an order for a logged-in user', function(done) {
@@ -48,14 +56,7 @@ describe('Order.create', function() {
         done(err);
         return;
       }
-
-      const orderData = {
-        menu_item_ids: [menuItem1.id, menuItem2.id, menuItem3.id],
-        transaction_date: '2024-04-28',
-        table_number: 5,
-        total_price: menuItem1.price + menuItem2.price + menuItem3.price
-      };
-
+ 
       agent
         .post('/api/orders/create')
         .set('cookie', sessionCookie)
@@ -73,6 +74,31 @@ describe('Order.create', function() {
           assert.strictEqual(orderRes.body.table_number, orderData.table_number, 'Expected table number to match');
           assert.strictEqual(orderRes.body.total_price, orderData.total_price, 'Expected total price to match');
 
+          done();
+        });
+    });
+
+    done();
+  });
+
+  it('should not create an order for unauthenticated user', function(done) {
+    destroySession(firstCustomer.id, function(err, sessionCookie) {
+      if (err) {
+        done(err);
+        return;
+      }
+
+      agent
+        .post('/api/orders/create')
+        .set('cookie', sessionCookie)
+        .send(orderData)
+        .end(function(err, orderRes) {
+          if (err) {
+            done(err);
+            return;
+          }
+
+          assert.strictEqual(orderRes.status, 401, 'Expected status code 401');
           done();
         });
     });
