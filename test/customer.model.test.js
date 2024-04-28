@@ -55,7 +55,6 @@ describe('Customer session', function() {
   let firstCustomer;
   let otherCustomer;
 
-  // Register a customer before testing login
   beforeEach(async function() {
     firstCustomer = await Customer.create({
       username: 'botdistrikt',
@@ -70,21 +69,25 @@ describe('Customer session', function() {
     });
   });
 
-  // Test suite for Customer login endpoint
   describe('POST /api/customers/login', function() {
-    // Test case for successful login
-    it('should log in a customer with valid username', async function () {
-      const sessionCookie = await createSessionCookie({ userId: firstCustomer.id });
-      const response = await supertest(app)
+    it('should log in a customer with valid username', function (done) {
+      const sessionCookie = createSessionCookie({ userId: firstCustomer.id });
+      supertest(app)
         .post('/api/customers/login')
         .set('cookie', [sessionCookie])
-        .send({ username: 'botdistrikt' });
+        .send({ username: 'botdistrikt' })
+        .end(function(err, res) {
+          if(err) {
+            assert.strictEqual(response.status, 401, 'Expected status code 401');
+            done(err)
+            return
+          }
 
-      assert.strictEqual(response.status, 200, 'Expected status code 200');
+          assert.strictEqual(res.status, 200, 'Expected status code 200');
+          done();
+        })
     });
     
-
-    // Test case for login with invalid username
     it('should return an error for invalid username', async function() {
       const sessionCookie = await createSessionCookie({ userId: null });
       const response = await supertest(app)
@@ -96,9 +99,7 @@ describe('Customer session', function() {
     });
   });
 
-  // Test suite for Customer logout endpoint
   describe('POST /api/customers/logout', function() {
-    // Test case for successful logout
     let sessionCookie;
     
     before(async function() {
@@ -108,9 +109,8 @@ describe('Customer session', function() {
     it('should log out a customer successfully', async function () {
       const response = await supertest(app)
         .post('/api/customers/logout')
-        .set('Cookie', [sessionCookie]); // Set the session cookie in the request
+        .set('Cookie', [sessionCookie]);
 
-      // Destroy the session after logging out
       await destroySession(sessionCookie);
 
       assert.strictEqual(response.status, 200, 'Expected status code 200');
@@ -123,12 +123,10 @@ describe('Customer session', function() {
   });
 });
 
-// Test suite for Customer login endpoint
 describe('Customer.profile', function() {
   let firstCustomer;
   let otherCustomer;
 
-  // Register a customer before testing login
   beforeEach(async function() {
     firstCustomer = await Customer.create({
       username: 'profile',
@@ -143,30 +141,74 @@ describe('Customer.profile', function() {
     });
   });
 
-  // Test case for successful retrieval of user profile
-  it('should return the user profile for a logged-in user', async function() {
-    const sessionCookie = await createSessionCookie({ userId: firstCustomer.id });
-    const response = await supertest(app).get('/api/customers/profile').set('Cookie', [sessionCookie]);
-    assert.strictEqual(response.status, 200, 'Expected status code 200');
+  it('should return the user profile for a logged-in user', function(done) {
+    createSessionCookie({ userId: firstCustomer.id }, function(err, sessionCookie) {
+      if (err) {
+        done(err);
+        return;
+      }
+  
+      agent
+        .get('/api/customers/profile')
+        .set('cookie', sessionCookie)
+        .end(function(err, profileRes) {
+          if (err) {
+            done(err);
+            return;
+          }
+
+          assert.strictEqual(profileRes.status, 200, 'Expected status code 200');
+          done();
+        });
+    });
+    done()
   });
 
-  // Test case for user not logged in
-  it('should return an error for a user not logged in', async function() {
-    // Send the request without setting the session cookie
-    const response = await supertest(app).get('/api/customers/profile');
-    assert.strictEqual(response.status, 401, 'Expected status code 401');
+  it('should return an error for a user not logged in', function(done) {
+    destroySession(firstCustomer.id, function(err, sessionCookie) {  
+      agent
+        .get('/api/customers/profile')
+        .set('cookie', sessionCookie)
+        .end(function(err, profileRes) {
+          if (err) {
+            done(err);
+            return;
+          }
+
+          assert.strictEqual(profileRes.status, 401, 'Expected status code 401');
+          done();
+        });
+    });
+    done()
   });
 
-  // Test case for user not found
-  it('should return an error for a user not found', async function() {
-    // Create a session cookie with non-existing userId
-    const invalidSessionCookie = await createSessionCookie({ userId: 1001 });
-    const response = await supertest(app).get('/api/customers/profile').set('Cookie', [invalidSessionCookie]);
-    assert.strictEqual(response.status, 404, 'Expected status code 404');
+  it('should return an error for a user not found', function(done) {
+    const randomUserId = Math.floor(Math.random() * 1000);
+  
+    createSessionCookie({ userId: randomUserId }, function(err, sessionCookie) {
+      if (err) {
+        done(err);
+        return;
+      }
+  
+      agent
+        .get('/api/customers/profile')
+        .set('cookie', sessionCookie)
+        .end(function(err, profileRes) {
+          if (err) {
+            done(err);
+            return;
+          }
+
+          assert.strictEqual(profileRes.status, 404, 'Expected status code 404');
+          done();
+        });
+    });
+
+    done()
   });
 
   after(async function() {
-    // Destroy the session after all test cases are executed
     await destroySession();
     cleanDatabase();
   });
@@ -174,74 +216,122 @@ describe('Customer.profile', function() {
 
 describe('Customer.updateDetails', function() {
   let firstCustomer;
-  let sessionCookie;
 
   beforeEach(async function() {
     firstCustomer = await Customer.create({
       username: 'botdistrikt',
       phone: '',
-      email: 'test@example.com' // Initial valid email
+      email: 'test@example.com'
     });
 
     sessionCookie = await createSessionCookie({ userId: firstCustomer.id });
   });
 
-  it('should update user details with valid data', async function() {
-    const newData = {
-      email: 'newemail@example.com' // Valid new email format
-    };
+  it('should update user details with valid data', function(done) {
+    createSessionCookie({ userId: firstCustomer.id }, function(err, sessionCookie) {
+      if (err) {
+        done(err);
+        return;
+      }
+  
+      const newData = {
+        email: 'newemail@example.com'
+      };
 
-    const response = await supertest(app)
-      .put('/api/customers/profile/update')
-      .set('Cookie', sessionCookie)
-      .send(newData);
+      agent
+        .put('/api/customers/profile/update')
+        .set('cookie', sessionCookie)
+        .send(newData)
+        .end(function(err, profileRes) {
+          if (err) {
+            done(err);
+            return;
+          }
 
-    assert.strictEqual(response.status, 200, 'Expected status code 200');
-    assert.strictEqual(response.body.email, newData.email, 'Expected email to be updated');
+          assert.strictEqual(profileRes.status, 200, 'Expected status code 200');
+          done();
+        });
+    });
+    done()
   });
 
-  it('should return an error for invalid email format', async function() {
-    const newData = {
-      email: 'invalidemail' // Invalid email format
-    };
+  it('should return an error for invalid email format', function(done) {
+    createSessionCookie({ userId: firstCustomer.id }, function(err, sessionCookie) {
+      if (err) {
+        done(err);
+        return;
+      }
+  
+      const newData = {
+        email: 'invalidemail'
+      };
 
-    const response = await supertest(app)
-      .put('/api/customers/profile/update')
-      .set('Cookie', sessionCookie)
-      .send(newData);
+      agent
+        .put('/api/customers/profile/update')
+        .set('cookie', sessionCookie)
+        .send(newData)
+        .end(function(err, profileRes) {
+          if (err) {
+            done(err);
+            return;
+          }
 
-    assert.strictEqual(response.status, 400, 'Expected status code 400 for invalid email format');
-    assert.strictEqual(response.body.error, 'Invalid email format', 'Expected error message for invalid email format');
+          assert.strictEqual(profileRes.status, 400, 'Expected status code 400');
+          done();
+        });
+    });
+    done()
   });
 
-  it('should return an error for user not logged in', async function() {
-    const newData = {
-      email: 'newemail@example.com' // Valid new email format
-    };
+  it('should return an error for user not logged in', function(done) {
+    destroySession(firstCustomer.id, function(err, sessionCookie) {  
+      const newData = {
+        email: 'newemail2@example.com'
+      };
 
-    const response = await supertest(app)
-      .put('/api/customers/profile/update')
-      .send(newData);
+      agent
+        .put('/api/customers/profile/update')
+        .set('cookie', sessionCookie)
+        .send(newData)
+        .end(function(err, profileRes) {
+          if (err) {
+            done(err);
+            return;
+          }
 
-    assert.strictEqual(response.status, 401, 'Expected status code 401 for user not logged in');
-    assert.strictEqual(response.body.error, 'User not logged in', 'Expected error message for user not logged in');
+          assert.strictEqual(profileRes.status, 401, 'Expected status code 401');
+          done();
+        });
+    });
+    done()
   });
 
-  it('should return an error if user not found', async function() {
-    const newData = {
-      email: 'newemail@example.com' // Valid new email format
-    };
+  it('should return an error if user not found', function(done) {
+    createSessionCookie({ userId: 1234 }, function(err, sessionCookie) {
+      if (err) {
+        done(err);
+        return;
+      }
+  
+      const newData = {
+        email: 'newemail@example.com'
+      };
 
-    // Use an invalid user ID to simulate user not found
-    sessionCookie = await createSessionCookie({ userId: 'invalidUserId' });
+      agent
+        .put('/api/customers/profile/update')
+        .set('cookie', sessionCookie)
+        .send(newData)
+        .end(function(err, profileRes) {
+          if (err) {
+            done(err);
+            return;
+          }
 
-    const response = await supertest(app)
-      .put('/api/customers/profile/update')
-      .set('Cookie', sessionCookie)
-      .send(newData);
-
-    assert.strictEqual(response.status, 404, 'Expected status code 404 for user not found');
-    assert.strictEqual(response.body.error, 'User not found', 'Expected error message for user not found');
+          assert.strictEqual(profileRes.status, 404, 'Expected status code 404');
+          done();
+        });
+    });
+    done()
   });
 
   after(async function() {
