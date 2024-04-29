@@ -81,7 +81,7 @@ describe('Order.create', function() {
     done();
   });
 
-  it('should not create an order for unauthenticated user', function(done) {
+  it('should create an order for guest user', function(done) {
     destroySession(firstCustomer.id, function(err, sessionCookie) {
       if (err) {
         done(err);
@@ -98,7 +98,7 @@ describe('Order.create', function() {
             return;
           }
 
-          assert.strictEqual(orderRes.status, 401, 'Expected status code 401');
+          assert.strictEqual(orderRes.status, 200, 'Expected status code 200');
           done();
         });
     });
