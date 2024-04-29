@@ -1,11 +1,13 @@
 'use strict';
 
+const { uniqueUsername, transactionUUID } = require('../utils')
+
 module.exports = function(Order) {
   Order.createOrder = function(data, req, callback) {
     let customerId;
 
     if (!req.session.userId) {
-      let guestUniqueUsername = Math.floor(Math.random().toString(2) * Date.now()).toString(36);
+      let guestUniqueUsername = uniqueUsername()
 
       Order.app.models.Customer.create({ username: guestUniqueUsername }, function(err, customer) {
         if (err) {
@@ -26,8 +28,7 @@ module.exports = function(Order) {
 
     function continueOrderCreation(customerId) {
       const { menu_item_ids, transaction_date, table_number, total_price } = data;
-      const timestampUnix = Math.floor(Date.now() / 1000); // Current Unix timestamp in seconds
-      const transaction_uuid = `${table_number}-${timestampUnix}`;
+      const transaction_uuid = transactionUUID(table_number);
 
       Order.create({
           customer_id: customerId,

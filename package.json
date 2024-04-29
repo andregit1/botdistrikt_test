@@ -37,6 +37,7 @@
     "loopback-datasource-juggler": "^5.0.8",
     "mocha": "^10.4.0",
     "nodemon": "^3.1.0",
+    "sinon": "^17.0.1",
     "supertest": "^7.0.0",
     "supertest-session": "^5.0.1"
   },
