@@ -7,10 +7,12 @@ const {
   destroySession,
 } = require('./test-helper.js')
 const { describe } = require('mocha');
+const sinon = require('sinon');
 
 const OrderSchema = require('../common/models/order.json');
 const Order = app.registry.createModel(OrderSchema);
 require('../common/models/order.js')(Order);
+const { uniqueUsername, transactionUUID } = require('../common/utils');
 
 const CustomerSchema = require('../common/models/customer.json');
 const Customer = app.registry.createModel(CustomerSchema);
@@ -67,6 +69,12 @@ describe('Order.create', function() {
             return;
           }
 
+          const transactionUUIDSpy = sinon.spy(transactionUUID);
+          const uniqueUsernameSpy = sinon.spy(uniqueUsername);
+
+          assert.ok(transactionUUIDSpy.calledOnce, 'Expected transactionUUID to be called');
+          assert.ok(uniqueUsernameSpy.calledOnce, 'Expected uniqueUsername to be called');
+          
           assert.strictEqual(orderRes.status, 200, 'Expected status code 200');
           assert.strictEqual(orderRes.body.customer, firstCustomer, 'Expected customer object');
           assert.strictEqual(orderRes.body.ordered_items, [menuItem1, menuItem2, menuItem3], 'Expected menu items object');
@@ -98,7 +106,19 @@ describe('Order.create', function() {
             return;
           }
 
+          const transactionUUIDSpy = sinon.spy(transactionUUID);
+          const uniqueUsernameSpy = sinon.spy(uniqueUsername);
+
+          assert.ok(transactionUUIDSpy.calledOnce, 'Expected transactionUUID to be called');
+          assert.ok(uniqueUsernameSpy.calledOnce, 'Expected uniqueUsername to be called');
+          
           assert.strictEqual(orderRes.status, 200, 'Expected status code 200');
+          assert.strictEqual(orderRes.body.customer, firstCustomer, 'Expected customer object');
+          assert.strictEqual(orderRes.body.ordered_items, [menuItem1, menuItem2, menuItem3], 'Expected menu items object');
+          assert.strictEqual(orderRes.body.transaction_date, orderData.transaction_date, 'Expected transaction date to match');
+          assert.strictEqual(orderRes.body.table_number, orderData.table_number, 'Expected table number to match');
+          assert.strictEqual(orderRes.body.total_price, orderData.total_price, 'Expected total price to match');
+          
           done();
         });
     });
