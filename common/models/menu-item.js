@@ -1,7 +1,5 @@
 'use strict';
 
-const checkLoggedIn = require('../helpers/checkLoggedIn');
-
 module.exports = function(Menuitem) {
   // Define the remote method to fetch all menuItems
   Menuitem.getAllMenuitems = function(callback) {
