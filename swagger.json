@@ -427,6 +427,64 @@
         }
       }
     },
+    "/orders/histories": {
+      "get": {
+        "tags": [
+          "Order"
+        ],
+        "summary": "Get all order histories.",
+        "operationId": "Order.histories",
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer",
+                        "description": "Order ID"
+                      },
+                      "customer": {
+                        "$ref": "#/components/schemas/Customer",
+                        "description": "Customer details"
+                      },
+                      "ordered_items": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/MenuItem"
+                        },
+                        "description": "List of ordered items"
+                      },
+                      "transaction_uuid": {
+                        "type": "string",
+                        "description": "Transaction UUID"
+                      },
+                      "transaction_date": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Transaction date and time"
+                      },
+                      "table_number": {
+                        "type": "integer",
+                        "description": "Table number"
+                      },
+                      "total_price": {
+                        "type": "number",
+                        "description": "Total price of the order"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "tags": [
       {
         "name": "Customer"

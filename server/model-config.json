@@ -50,7 +50,8 @@
       "remoting": {
         "sharedMethods": {
           "*": false,
-          "createOrder": true
+          "createOrder": true,
+          "histories": true
         }
       }
     }

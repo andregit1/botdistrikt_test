@@ -1,7 +1,6 @@
 'use strict';
 
 module.exports = function(Customer) {
-  // Register endpoint
   Customer.register = function(data, callback) {
     const username = data.username;
 
@@ -23,7 +22,6 @@ module.exports = function(Customer) {
     });
   };
 
-  // Expose the register method over REST for registration
   Customer.remoteMethod('register', {
     description: 'Register a new customer.',
     accepts: [
@@ -39,7 +37,7 @@ module.exports = function(Customer) {
     http: { verb: 'post', path: '/register' },
   });
 
-  // Remote method for login
+
   Customer.login = function(data, req, callback) {
     const username = data.username;
     
@@ -58,7 +56,6 @@ module.exports = function(Customer) {
     });
   };
 
-  // Expose the login method over REST
   Customer.remoteMethod('login', {
     description: 'Login with unique username.',
     accepts: [
@@ -75,7 +72,7 @@ module.exports = function(Customer) {
     http: { verb: 'post', path: '/login' },
   });
 
-  // Remote method for logout
+
   Customer.logout = function(req, callback) {
     // Clear the user's ID from the session
     delete req.session.userId
@@ -86,7 +83,6 @@ module.exports = function(Customer) {
     callback(null, 'Logout successful');
   };
 
-  // Expose the logout method over REST
   Customer.remoteMethod('logout', {
     accepts: [
       { arg: 'req', type: 'object', http: { source: 'req' } }
@@ -94,22 +90,19 @@ module.exports = function(Customer) {
     returns: { arg: 'message', type: 'string' },
     http: { verb: 'post', path: '/logout' }
   });
+  
 
-  // Define the fields to be returned
   const PROFILE_FIELDS = { email: true, phone: true, username: true };
-
-  // Expose the method to get the current user's profile
   Customer.profile = function(req, callback) {
     // Get the current user's ID from the session
     var userId = req.session.userId;
     
     if (!userId) {
-      var error = new Error('User not logged in');
+      var error = new Error('Please log in to continue.');
       error.statusCode = 401;
       return callback(error);
     }
     
-    // Find the user by ID and return the specified fields
     Customer.findById(userId, { fields: PROFILE_FIELDS }, function(err, user) {
       if (err) return callback(err);
       if (!user) {
@@ -121,7 +114,6 @@ module.exports = function(Customer) {
     });
   };
 
-  // Expose the profile method over REST
   Customer.remoteMethod('profile', {
     accepts: [
       { arg: 'req', type: 'object', http: { source: 'req' } }
@@ -130,15 +122,13 @@ module.exports = function(Customer) {
     http: { verb: 'get', path: '/profile' }
   });
 
-  const EMAIL_REGEX = new RegExp("^[\\w\\.-]+@([\\w-]+\\.)+[\\w-]{2,4}$");
   
-  // Expose the method to update user details
+  const EMAIL_REGEX = new RegExp("^[\\w\\.-]+@([\\w-]+\\.)+[\\w-]{2,4}$");
   Customer.updateDetails = function(data, req, callback) {
-    // Get the current user's ID from the session
     var userId = req.session.userId;
     
     if (!userId) {
-      var error = new Error('User not logged in');
+      var error = new Error('Please log in to continue.');
       error.statusCode = 401;
       return callback(error);
     }
@@ -150,7 +140,6 @@ module.exports = function(Customer) {
       return callback(error);
     }
 
-    // Find the user by ID and update their details
     Customer.findById(userId, function(err, user) {
       if (err) return callback(err);
       if (!user) {
@@ -165,7 +154,6 @@ module.exports = function(Customer) {
     });
   };
 
-  // Expose the updateDetails method over REST
   Customer.remoteMethod('updateDetails', {
     description: 'Update the details of the logged-in user.',
     accepts: [
@@ -176,7 +164,8 @@ module.exports = function(Customer) {
     http: { verb: 'put', path: '/profile/update' }
   });
 
-  // Define the remote method to fetch all customers
+
+
   Customer.getAllCustomers = function(callback) {
     Customer.find({}, function(err, customers) {
       if (err) {
@@ -188,7 +177,6 @@ module.exports = function(Customer) {
     });
   };
 
-  // Expose the remote method over REST
   Customer.remoteMethod('getAllCustomers', {
     description: 'Get all customers.',
     returns: { arg: 'data', type: 'array', root: true },

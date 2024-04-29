@@ -1,6 +1,7 @@
 'use strict';
 
 const { uniqueUsername, transactionUUID } = require('../utils')
+const async = require('async');
 
 module.exports = function(Order) {
   Order.createOrder = function(data, req, callback) {
@@ -94,4 +95,62 @@ module.exports = function(Order) {
     returns: { arg: 'order', type: 'object', root: true },
     http: { verb: 'post', path: '/' }
   });
+ 
+  
+  Order.histories = function(req, callback) {
+
+    var userId = req.session.userId;
+
+    if (!userId) {
+      var error = new Error('Please log in to continue.');
+      error.statusCode = 401;
+      return callback(error);
+    }
+
+    Order.find({ where: { customer_id: req.session.userId }}, function(err, orders) {
+      if (err) {
+        console.error('Error fetching orders:', err);
+        return callback(err);
+      }
+  
+      const orderData = [];
+  
+      // Iterate over each order to fetch associated customer and menu items
+      async.eachSeries(orders, function(order, next) {
+        order.menuItems(function(err, menuItems) {
+          if (err) {
+            console.error('Error fetching ordered items:', err);
+            return next(err);
+          }
+
+          const response = {
+            id: order.id,
+            ordered_items: menuItems,
+            transaction_uuid: order.transaction_uuid,
+            transaction_date: order.transaction_date,
+            table_number: order.table_number,
+            total_price: order.total_price,
+          };
+
+          orderData.push(response);
+          next();
+        });
+      }, function(err) {
+        if (err) {
+          console.error('Error processing orders:', err);
+          return callback(err);
+        }
+  
+        callback(null, orderData);
+      });
+    });
+  };
+  
+  // Expose the remote method over REST
+  Order.remoteMethod('histories', {
+    description: 'Get all order histories.',
+    accepts: [ { arg: 'req', type: 'object', http: { source: 'req' } } ],
+    returns: { arg: 'data', type: 'array', root: true },
+    http: { verb: 'get', path: '/histories' }
+  });  
 };

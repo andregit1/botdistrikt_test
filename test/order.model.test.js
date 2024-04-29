@@ -126,6 +126,60 @@ describe('Order.create', function() {
     done();
   });
 
+  it('should fetch order histories for a logged-in user', function(done) {
+    createSessionCookie({ userId: firstCustomer.id }, function(err, sessionCookie) {
+      if (err) {
+        done(err);
+        return;
+      }
+ 
+      agent
+        .get('/api/orders/histories')
+        .set('cookie', sessionCookie)
+        .end(function(err, orderRes) {
+          if (err) {
+            done(err);
+            return;
+          }
+
+          assert.strictEqual(orderRes.status, 401, 'Expected status code 401');
+          assert.strictEqual(orderRes.body.ordered_items, [menuItem1, menuItem2, menuItem3], 'Expected menu items object');
+          assert.strictEqual(orderRes.body.transaction_date, orderData.transaction_date, 'Expected transaction date to match');
+          assert.strictEqual(orderRes.body.table_number, orderData.table_number, 'Expected table number to match');
+          assert.strictEqual(orderRes.body.total_price, orderData.total_price, 'Expected total price to match');
+
+          done();
+        });
+    });
+
+    done()
+  });
+
+  it('should not fetch order histories for a logged-in user', function(done) {
+    destroySession(firstCustomer.id, function(err, sessionCookie) {
+      if (err) {
+        done(err);
+        return;
+      }
+ 
+      agent
+        .get('/api/orders/histories')
+        .set('cookie', sessionCookie)
+        .end(function(err, orderRes) {
+          if (err) {
+            done(err);
+            return;
+          }
+
+          assert.strictEqual(orderRes.status, 401, 'Expected status code 401');
+
+          done();
+        });
+    });
+
+    done()
+  });
+
   after(async function() {
     await destroySession();
     cleanDatabase();
