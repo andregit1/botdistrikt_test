@@ -1,0 +1,19 @@
+{{!-- <Menu @menuItems={{this.menuItems}} /> --}}
+{{!-- <LinkTo class="" @route="menu" @model={{@menu.id}} /> --}}
+
+<div class="grid grid-cols-3 gap-4">
+  {{#each @menuItems as |menuItem|}}
+    <div class="p-4 border border-gray-300 rounded-lg">
+      <img
+        src="{{menuItem.image_url}}"
+        alt="{{menuItem.name}}"
+        class="w-full h-auto"
+      />
+      <div class="mt-4">
+        <h2 class="text-lg font-semibold">{{menuItem.name}}</h2>
+        <p class="text-gray-500">{{menuItem.description}}</p>
+        <p class="mt-2 font-bold">${{menuItem.price}}</p>
+      </div>
+    </div>
+  {{/each}}
+</div>
