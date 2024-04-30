@@ -29,6 +29,15 @@
 		},
 		"image_name": {
 			"type": "string"
+		},
+		"is_default": {
+			"type": "boolean",
+			"postgresql": {
+				"columnName": "is_default",
+				"dataType": "BOOLEAN",
+				"nullable": false,
+				"default": false
+			}
 		}
 	},
 	"validations": [],
