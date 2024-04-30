@@ -10,7 +10,8 @@
     "start": "concurrently -c -k \"nodemon server/server.js\" \"cd client && ember serve\"",
     "dev": "nodemon server/server.js",
     "posttest": "npm run lint",
-    "test": "set NODE_ENV=test && mocha test/*test.js"
+    "test": "export NODE_ENV=test && mocha test/*test.js",
+    "setup": "npm install && cd client && npm install"
   },
   "dependencies": {
     "compression": "^1.0.3",
