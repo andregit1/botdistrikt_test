@@ -172,10 +172,10 @@ Follow these steps to set up the application:
 - **Open your web browser and navigate to:**
 
   - **Frontend:**
-    [http://localhost:4200](http://localhost:4200).
+    [http://localhost:4200](http://localhost:4200)
 
   - **Backend:**
-    [http://localhost:3000/explorer](http://localhost:3000/explorer).
+    [http://localhost:3000/explorer](http://localhost:3000/explorer)
 
 ### Additional Commands
 
