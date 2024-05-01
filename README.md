@@ -68,30 +68,49 @@ Follow these steps to set up the application:
     ```
 
   - **MacOS:**
-   <div style="border: 1px solid #ccc; padding: 10px; border-radius: 5px;">
-     <p><strong>Install Homebrew:</strong></p>
-     <p>If Homebrew is not already installed on your system, you can install it by running the following command in your terminal:</p>
-     <pre><code>/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"</code></pre>
-     <p><strong>Install Node.js:</strong></p>
-     <p>Once Homebrew is installed, you can use it to install Node.js version 16.20.2. Run the following commands in your terminal:</p>
-     <pre><code>
-        brew install node@16.20.2
-        brew unlink node
-        brew link node@16.20.2
-     </code></pre>
-     <p>After installation, verify that Node.js version 16.20.2 is installed by running:</p>
-     <pre><code>node -v</code></pre>
-     <p>If needed, you can use the <code>--overwrite</code> flag with <code>brew link</code> to force linking, for example:</p>
-     <pre><code>brew link --overwrite node@16.20.2</code></pre>
-     <p><strong>Why unlink and then link again?</strong></p>
-     <p>Unlinking and then linking again is necessary to set Node.js version 16.20.2 as the active version. This ensures that any existing installations of other Node.js versions do not interfere.</p>
-     <p>If both Node.js and Node.js version 16.20.2 are installed, unlinking the current version and then linking version 16.20.2 ensures that version 16.20.2 becomes the active version.</p>
-     <pre><code>
-        brew unlink node
-        brew link node@16.20.2
-     </code></pre>
-     <p><strong>Credit:</strong> <a href="https://stackoverflow.com/a/67529751">Stack Overflow</a></p>
-  </div>
+
+    **Install Homebrew:**
+
+    If Homebrew is not already installed on your system, you can install it by running the following command in your terminal:
+
+    ```bash
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    ```
+
+    **Install Node.js:**
+
+    Once Homebrew is installed, you can use it to install Node.js version 16.20.2. Run the following commands in your terminal:
+
+    ```bash
+    brew install node@16.20.2
+    brew unlink node
+    brew link node@16.20.2
+    ```
+
+    After installation, verify that Node.js version 16.20.2 is installed by running:
+
+    ```bash
+    node -v
+    ```
+
+    If needed, you can use the `--overwrite` flag with `brew link` to force linking, for example:
+
+    ```bash
+    brew link --overwrite node@16.20.2
+    ```
+
+    **Why unlink and then link again?**
+
+    Unlinking and then linking again is necessary to set Node.js version 16.20.2 as the active version. This ensures that any existing installations of other Node.js versions do not interfere.
+
+    If both Node.js and Node.js version 16.20.2 are installed, unlinking the current version and then linking version 16.20.2 ensures that version 16.20.2 becomes the active version.
+
+    ```bash
+    brew unlink node
+    brew link node@16.20.2
+    ```
+
+    **Credit:** [Stack Overflow](https://stackoverflow.com/a/67529751)
 
   - **Windows:**
     You can download the Node.js installer directly from the official Node.js website [here](https://nodejs.org/dist/v16.20.2/node-v16.20.2-x64.msi).
