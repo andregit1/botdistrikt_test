@@ -174,7 +174,7 @@ Follow these steps to set up the application:
   - **Frontend:**
     Open your web browser and navigate to `localhost:4200`.
 
-  - **Backend Explorer:**
+  - **Backend:**
     Access the backend explorer by going to `localhost:3000/explorer`.
 
 ### Additional Commands
