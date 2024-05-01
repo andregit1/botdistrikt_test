@@ -169,13 +169,13 @@ Follow these steps to set up the application:
   npm start
   ```
 
-- **Access the application:**
+- **Open your web browser and navigate to:**
 
   - **Frontend:**
-    Open your web browser and navigate to `localhost:4200`.
+    `localhost:4200`.
 
   - **Backend:**
-    Access the backend explorer by going to `localhost:3000/explorer`.
+    `localhost:3000/explorer`.
 
 ### Additional Commands
 
