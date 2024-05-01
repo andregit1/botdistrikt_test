@@ -54,11 +54,65 @@ module.exports = function(app) {
     }
   ];
 
-  MenuItem.create(menuItems, function(createdMenuItems) {
-    if (createdMenuItems) {
-      console.log('\nSuccess seeding data for menu items');
+  
+
+  // Function to find all existing menu items
+  function findAllMenuItems(callback) {
+    MenuItem.find({}, (err, existingMenuItems) => {
+      if (err) {
+        callback(err);
+      } else {
+        callback(null, existingMenuItems);
+      }
+    });
+  }
+
+  // Array to store new menu items
+  const newMenuItems = [];
+
+  // Function to filter out existing menu items
+  function filterNewMenuItems(existingMenuItems, callback) {
+    menuItems.forEach(menuItem => {
+      const existingItem = existingMenuItems.find(item => item.name === menuItem.name && item.is_default === menuItem.is_default);
+      if (!existingItem) {
+        newMenuItems.push(menuItem);
+      }
+    });
+    callback();
+  }
+
+  // Function to create new menu items
+  function createNewMenuItems(callback) {
+    MenuItem.create(newMenuItems, (err, createdMenuItems) => {
+      if (err) {
+        callback(err);
+      } else {
+        callback(null, createdMenuItems);
+      }
+    });
+  }
+
+  // Find all existing menu items
+  findAllMenuItems((err, existingMenuItems) => {
+    if (err) {
+      console.error('Error finding existing menu items:', err);
     } else {
-     console.log('\nMenu items already seeded');
+      // Filter out new menu items
+      filterNewMenuItems(existingMenuItems, () => {
+        // Create new menu items
+        createNewMenuItems((err, createdMenuItems) => {
+          if (err) {
+            console.error('Error creating new menu items:', err);
+          } else {
+            if (createdMenuItems?.length > 0) {
+              console.log('\nSuccess seeding data for menu items');
+            } else {
+             console.log('\nMenu items already seeded');
+            }
+          }
+        });
+      });
     }
-  });  
+  });
+ 
 };
