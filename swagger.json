@@ -302,24 +302,31 @@
             "name": "data",
             "in": "body",
             "description": "Data of the menu item to be created.",
-            "required": false,
+            "required": true,
             "schema": {
-              "name": {
-                "type": "string"
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "price": {
+                  "type": "number",
+                  "format": "double"
+                },
+                "image_url": {
+                  "type": "string"
+                },
+                "image_name": {
+                  "type": "string"
+                }
               },
-              "description": {
-                "type": "string"
-              },
-              "price": {
-                "type": "number",
-                "format": "double"
-              },
-              "image_url": {
-                "type": "string"
-              },
-              "image_name": {
-                "type": "string"
-              }
+              "required": [
+                "name",
+                "price"
+              ]
             }
           }
         ],
