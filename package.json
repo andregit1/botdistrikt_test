@@ -11,6 +11,7 @@
     "dev": "nodemon server/server.js",
     "posttest": "npm run lint",
     "test": "export NODE_ENV=test && mocha test/*test.js",
+    "test:windows": "set NODE_ENV=test && mocha test/*test.js",
     "setup": "npm install && cd client && npm install"
   },
   "dependencies": {

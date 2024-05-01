@@ -6,86 +6,160 @@ This guide helps you set up the necessary environment to run the project locally
 
 Follow these steps to set up the PostgreSQL database:
 
-1. Install PostgreSQL:
+- **Install PostgreSQL:**
 
-   ```
-   sudo apt install postgresql postgresql-contrib
-   ```
+  - **Linux:**
 
-2. Start PostgreSQL service:
+    ```bash
+    sudo apt install postgresql postgresql-contrib
+    ```
 
-   ```
-   sudo systemctl start postgresql.service
-   ```
+  - **Mac (using Homebrew):**
 
-3. Create a PostgreSQL role and database:
-   ```
-   sudo -u postgres psql -c "CREATE ROLE root WITH SUPERUSER CREATEDB CREATEROLE PASSWORD '123123123';”
-   sudo -u postgres createdb -O root resto_dev
-   ```
+    ```bash
+    brew install postgresql
+    ```
+
+  - **Windows:**
+  - Download PostgreSQL:
+    Download PostgreSQL version 16.2 from [EnterpriseDB](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads).
+
+  - Installation Process:
+
+    - During the installation process:
+
+      - Uncheck "Stack Builder" when prompted to select components to save time.
+      - Use port 5432 when prompted for port selection.
+      - Set the temporary password for the superuser as "123123123" when prompted.
+
+    - After Installation:
+      - Upon completion of the installation, create a user/role as "root" with the password "123123123".
+      - Create a database (not a schema) named "resto_dev".
+      - For complete step-by-step instructions, you can follow this guide: [How to Create PostgreSQL Database and Users using psql and pgAdmin](https://www.enterprisedb.com/postgres-tutorials/how-create-postgresql-database-and-users-using-psql-and-pgadmin).
+
+- **Start PostgreSQL service:**
+
+  - **Linux and Mac:**
+
+    ```bash
+    sudo systemctl start postgresql.service
+    ```
+
+  - **Windows:**
+    Start PostgreSQL service from the Services panel.
+
+- **Create a PostgreSQL role and database:**
+  ```bash
+  sudo -u postgres psql -c "CREATE ROLE root WITH SUPERUSER CREATEDB CREATEROLE PASSWORD '123123123';”
+  sudo -u postgres createdb -O root resto_dev
+  ```
 
 ## 2. Application Setup
 
 Follow these steps to set up the application:
 
-1. Install Node.js version 16.20.2.
+- **Install Node.js version 16.20.2:**
 
-2. Install LoopBack CLI globally:
+  - **Linux:**
 
-   ```
-   npm install -g loopback-cli
-   ```
-
-3. Install Ember CLI globally:
-
-   ```
-   npm install -g ember-cli
-   ```
-
-4. Install PhantomJS globally:
-
-   ```
-   npm install -g phantomjs phantomjs-rebuilt
-   ```
-
-5. Navigate to the project directory:
-
-   ```
-   cd botdistrikt_test
-   ```
-
-6. Run setup:
-
-   ```
-   npm run setup
-   ```
-
-7. Start the backend server:
-
-   ```
-   npm run dev
-   ```
-
-8. Navigate to the client directory:
-
-   ```
-   cd client
-   ```
-
-9. Serve the frontend:
-
-   ```
-   ember serve
-   ```
-
-10. Start the application:
-    ```
-    npm start
+    ```bash
+    curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash -
+    sudo apt-get install -y nodejs | sudo apt-get install -y nodejs=16.20.2
     ```
 
-## Additional Commands
+  - **MacOS:**
+   <div style="border: 1px solid #ccc; padding: 10px; border-radius: 5px;">
+     <p><strong>Install Homebrew:</strong></p>
+     <p>If Homebrew is not already installed on your system, you can install it by running the following command in your terminal:</p>
+     <pre><code>/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"</code></pre>
+     <p><strong>Install Node.js:</strong></p>
+     <p>Once Homebrew is installed, you can use it to install Node.js version 16.20.2. Run the following commands in your terminal:</p>
+     <pre><code>
+        brew install node@16.20.2
+        brew unlink node
+        brew link node@16.20.2
+     </code></pre>
+     <p>After installation, verify that Node.js version 16.20.2 is installed by running:</p>
+     <pre><code>node -v</code></pre>
+     <p>If needed, you can use the <code>--overwrite</code> flag with <code>brew link</code> to force linking, for example:</p>
+     <pre><code>brew link --overwrite node@16.20.2</code></pre>
+     <p><strong>Why unlink and then link again?</strong></p>
+     <p>Unlinking and then linking again is necessary to set Node.js version 16.20.2 as the active version. This ensures that any existing installations of other Node.js versions do not interfere.</p>
+     <p>If both Node.js and Node.js version 16.20.2 are installed, unlinking the current version and then linking version 16.20.2 ensures that version 16.20.2 becomes the active version.</p>
+     <pre><code>
+        brew unlink node
+        brew link node@16.20.2
+     </code></pre>
+     <p><strong>Credit:</strong> <a href="https://stackoverflow.com/a/67529751">Stack Overflow</a></p>
+  </div>
 
-- To run backend tests:
+  - **Windows:**
+    You can download the Node.js installer directly from the official Node.js website [here](https://nodejs.org/dist/v16.20.2/node-v16.20.2-x64.msi).
+
+- **Install LoopBack CLI globally:**
+
+  ```bash
+  npm install -g loopback-cli
   ```
-  npm test
+
+- **Install Ember CLI globally:**
+
+  ```bash
+  npm install -g ember-cli
   ```
+
+- **Install PhantomJS globally:**
+
+  ```bash
+  npm install -g phantomjs phantomjs-rebuilt
+  ```
+
+- **Navigate to the project directory:**
+
+  ```bash
+  cd botdistrikt_test
+  ```
+
+- **Run setup:**
+
+  ```bash
+  npm run setup
+  ```
+
+- **Start the backend server:**
+
+  ```bash
+  npm run dev
+  ```
+
+- **Navigate to the client directory:**
+
+  ```bash
+  cd client
+  ```
+
+- **Serve the frontend:**
+
+  ```bash
+  ember serve
+  ```
+
+- **Start the application:**
+  ```bash
+  npm start
+  ```
+
+### Additional Commands
+
+- **To run backend tests:**
+
+  - **Linux and Mac:**
+
+    ```bash
+    npm test
+    ```
+
+  - **Windows:**
+    ```bash
+    npm run test:windows
+    ```
