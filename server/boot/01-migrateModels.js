@@ -5,6 +5,6 @@ module.exports = function(app) {
 
   datasources.autoupdate(function(err) {
     if (err) throw err;
-    console.log('Models migrated for datasources');
+    console.log('\nModels migrated for datasources');
   });
 };

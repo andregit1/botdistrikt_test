@@ -22,7 +22,15 @@
 		},
 		"price": {
 			"type": "number",
-			"required": true
+			"required": true,
+			"postgresql": {
+				"columnName": "price",
+				"dataType": "numeric",
+				"dataLength": null,
+				"dataPrecision": 10,
+				"dataScale": 2,
+				"nullable": false
+			}
 		},
 		"image_url": {
 			"type": "string"
