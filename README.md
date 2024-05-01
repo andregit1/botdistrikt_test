@@ -26,16 +26,9 @@ Follow these steps to set up the PostgreSQL database:
 
   - Installation Process:
 
-    - During the installation process:
-
-      - Uncheck "Stack Builder" when prompted to select components to save time.
-      - Use port 5432 when prompted for port selection.
-      - Set the temporary password for the superuser as "123123123" when prompted.
-
-    - After Installation:
-      - Upon completion of the installation, create a user/role as "root" with the password "123123123".
-      - Create a database (not a schema) named "resto_dev".
-      - For complete step-by-step instructions, you can follow this guide: [How to Create PostgreSQL Database and Users using psql and pgAdmin](https://www.enterprisedb.com/postgres-tutorials/how-create-postgresql-database-and-users-using-psql-and-pgadmin).
+    - Uncheck "Stack Builder" when prompted to select components to save time.
+    - Use port 5432 when prompted for port selection.
+    - Set the temporary password for the superuser as "123123123" when prompted.
 
 - **Start PostgreSQL service:**
 
@@ -49,10 +42,22 @@ Follow these steps to set up the PostgreSQL database:
     Start PostgreSQL service from the Services panel.
 
 - **Create a PostgreSQL role and database:**
-  ```bash
-  sudo -u postgres psql -c "CREATE ROLE root WITH SUPERUSER CREATEDB CREATEROLE PASSWORD '123123123';”
-  sudo -u postgres createdb -O root resto_dev
-  ```
+
+  - **Linux and Mac:**
+    To create a PostgreSQL role and database on Linux and Mac, execute the following commands in your terminal:
+
+    ```bash
+    sudo -u postgres psql -c "CREATE ROLE root WITH SUPERUSER CREATEDB CREATEROLE PASSWORD '123123123';”
+    sudo -u postgres createdb -O root resto_dev
+    ```
+
+  - **Windows:**
+    After PostgreSQL installation:
+
+    - Create a user/role named "root" with the password "123123123".
+    - Create a database (not a schema) named "resto_dev".
+
+    For detailed instructions, you can refer to this guide: [How to Create PostgreSQL Database and Users using psql and pgAdmin](https://www.enterprisedb.com/postgres-tutorials/how-create-postgresql-database-and-users-using-psql-and-pgadmin).
 
 ## 2. Application Setup
 
